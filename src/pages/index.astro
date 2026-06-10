@@ -1,0 +1,61 @@
+---
+// Astro lee el archivo interno de la computadora mientras se fabrica la página web
+import trabajos from '../../public/data/jobs.json';
+---
+
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GitDev Jobs | Tareas Cortas Freelance</title>
+  <style>
+    /* Estilos para que la página se vea hermosa en celulares, tablets y computadoras */
+    body { font-family: system-ui, -apple-system, sans-serif; background: #f3f4f6; color: #1f2937; margin: 0; padding: 1rem; }
+    .wrapper { max-width: 700px; margin: 0 auto; }
+    header { display: flex; justify-content: space-between; align-items: center; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1.5rem; }
+    h1 { margin: 0; font-size: 1.5rem; color: #111827; }
+    .kofi { background: #ff5f5f; color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: bold; font-size: 0.9rem; }
+    .anuncio { background: #fef08a; border: 1px solid #fef08a; padding: 1rem; border-radius: 12px; text-align: center; margin-bottom: 1.5rem; font-weight: 500; }
+    .anuncio a { color: #854d0e; text-decoration: underline; }
+    .tarjeta { background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1rem; }
+    .fuente { display: inline-block; background: #e0f2fe; color: #0369a1; font-size: 0.75rem; font-weight: bold; padding: 0.25rem 0.5rem; border-radius: 6px; margin-bottom: 0.5rem; }
+    h2 { margin: 0 0 0.5rem 0; font-size: 1.25rem; color: #111827; }
+    .empresa { color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem; }
+    .boton-aplicar { display: inline-block; background: #111827; color: white; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 8px; font-weight: 500; font-size: 0.9rem; width: 100%; text-align: center; box-sizing: border-box; }
+    .boton-aplicar:hover { background: #374151; }
+    .vacio { text-align: center; padding: 3rem; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <h1>⚡ GitDev Jobs</h1>
+      <a href="https://ko-fi.com/" target="_blank" class="kofi">☕ Invítame un café</a>
+    </header>
+
+    <div class="anuncio">
+      🛠️ ¿Buscando hosting para tu portfolio? <a href="https://www.hostinger.com/" target="_blank">Usa Hostinger con descuento aquí</a>.
+    </div>
+
+    <main>
+      {trabajos.length === 0 ? (
+        /* Si el archivo JSON está vacío al principio, se muestra este mensaje elegante */
+        <div class="tarjeta vacio">
+          <p>El robot está buscando ofertas en este momento. Volvé en unos minutos. ⚙️</p>
+        </div>
+      ) : (
+        /* Si ya hay trabajos guardados, se dibuja uno por uno en la pantalla */
+        trabajos.map((job) => (
+          <div class="tarjeta">
+            <span class="fuente">{job.source}</span>
+            <h2>{job.title}</h2>
+            <div class="empresa">🏢 {job.company}</div>
+            <p>{job.description}</p>
+            <a href={job.url} target="_blank" class="boton-aplicar">Ver oferta de trabajo ↗</a>
+          </div>
+        ))
+      )}
+    </main>
+  </div>
+</body>
+</html>
