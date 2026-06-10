@@ -1,0 +1,42 @@
+name: Curator Automatico de Trabajos
+
+on:
+  schedule:
+    - cron: '0 */6 * * *' # Esto le dice a GitHub que corra el script solo cada 6 horas
+  workflow_dispatch: # Esto te pone un botón para que vos lo actives cuando quieras manualmente
+
+jobs:
+  curate-and-publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Le da permiso al robot de guardar el archivo JSON modificado en tu cuenta
+    timeout-minutes: 10
+
+    steps:
+      - name: Clonar el proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar el script extractor
+        run: node scripts/curate.mjs
+
+      - name: Guardar cambios si hay trabajos nuevos
+        run: |
+          git config --global user.name "gitdev-bot"
+          git config --global user.email "bot@gitdevjobs.local"
+          git add public/data/jobs.json
+          
+          # Si el robot encuentra trabajos nuevos, hace un commit (guarda) y sube los cambios
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: actualizar lista de trabajos"
+            git push
+          else
+            echo "No hay trabajos nuevos en esta corrida."
+          fi
